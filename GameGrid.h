@@ -3,6 +3,14 @@
 #include <vector>
 #include "Cell.h"
 
+/*
+Implementation of a "Grid" that holds a Cell in each
+i, j location.
+
+This grid is used to query Cells so that they can
+be updated accordingly.
+
+*/
 class GameGrid {
 	
 public:
