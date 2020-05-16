@@ -9,6 +9,8 @@ public:
 	GameGrid(int width, int height);
 	~GameGrid();
 
+	Cell* getCell(int i, int j);
+
 private:
 	int gWidth;
 	int gHeight;

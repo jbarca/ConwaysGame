@@ -8,9 +8,12 @@ public:
 
 	enum CellState { ALIVE, DEAD };
 
+	void setState(CellState cellState);
+	CellState getState();
+
 private:
 	int cX;
 	int cY;
 
-	unsigned int cState;
+	CellState cState;
 };
