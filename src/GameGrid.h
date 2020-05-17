@@ -18,6 +18,7 @@ public:
 	~GameGrid();
 
 	Cell* getCell(int i, int j);
+	int getLiveNeighbours(int i, int j);
 
 private:
 	int gWidth;

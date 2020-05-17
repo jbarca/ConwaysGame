@@ -1,11 +1,17 @@
 #include "ofApp.h"
-#include "../GameGrid.h"
+#include "GameGrid.h"
 #include <algorithm>
 
 // Setup necessary globals
-const int SCALE_FACTOR = 10;
+ofxIntSlider scale;
+ofxPanel gui;
+
+int SCALE_FACTOR = 100;
 GameGrid *gameGrid = NULL;
 bool canStartGame;
+
+// TODO: Fix game drawing with slider value as scale factor. Every time scale factor
+// is changed, update gameGrid to reflect the new scale factor
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -14,6 +20,9 @@ void ofApp::setup(){
 	// Initially, the game will not start
 	canStartGame = false;
 	ofSetFrameRate(30);
+
+	gui.setup();
+	gui.add(scale.setup("scale", 10, 10, 100));
 
 	//gameGrid->getCell(2, 1)->setState(Cell::CellState::ALIVE);
 	//gameGrid->getCell(1, 1)->setState(Cell::CellState::ALIVE);
@@ -49,20 +58,9 @@ void ofApp::draw(){
 		for (int i = 0; i < SCALE_FACTOR; i++) {
 			vector<Cell::CellState> rowChange;
 			for (int j = 0; j < SCALE_FACTOR; j++) {
-				liveNeighbours = 0;
 				// Get the number of live neighbours around the current Cell
-				for (int k = -1; k < 2; k++) {
-					for (int l = -1; l < 2; l++) {
-						if (k == 0 && l == 0) continue;
+				liveNeighbours = gameGrid->getLiveNeighbours(i, j);
 
-						if (i + k >= 0 && i + k < SCALE_FACTOR
-							&& j + l >= 0 && j + l < SCALE_FACTOR) {
-							if (gameGrid->getCell(i + k, j + l)->getState() == Cell::CellState::ALIVE) {
-								liveNeighbours++;
-							}
-						}
-					}
-				}
 				// If the Cell is alive and it has 2 or 3 live neighbours, it survives, otherwise
 				// it dies
 				if (gameGrid->getCell(i, j)->getState() == Cell::CellState::ALIVE) {
@@ -86,6 +84,7 @@ void ofApp::draw(){
 			}
 		}
 	}
+	gui.draw();
 }
 
 //--------------------------------------------------------------

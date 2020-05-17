@@ -57,3 +57,25 @@ changed.
 Cell* GameGrid::getCell(int i, int j) {
 	return gridArray[i][j];
 }
+
+/*
+Returns the number of live neighbours that surround the Cell
+located at position i, j.
+
+*/
+int GameGrid::getLiveNeighbours(int i, int j) {
+	int liveNeighbours = 0;
+	for (int k = -1; k < 2; k++) {
+		for (int l = -1; l < 2; l++) {
+			if (k == 0 && l == 0) continue;
+
+			if (i + k >= 0 && i + k < gWidth
+				&& j + l >= 0 && j + l < gHeight) {
+				if (gridArray[i + k][j + l]->getState() == Cell::CellState::ALIVE) {
+					liveNeighbours++;
+				}
+			}
+		}
+	}
+	return liveNeighbours;
+}
