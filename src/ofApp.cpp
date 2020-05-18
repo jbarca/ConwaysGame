@@ -3,10 +3,10 @@
 #include <algorithm>
 
 // Setup necessary globals
-ofxIntSlider scale;
-ofxPanel gui;
+//ofxIntSlider scale;
+//ofxPanel gui;
 
-int SCALE_FACTOR = 100;
+int SCALE_FACTOR = 10;
 GameGrid *gameGrid = NULL;
 bool canStartGame;
 
@@ -15,14 +15,15 @@ bool canStartGame;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofSetWindowTitle("Conway's Game of Life!");
 	// Create a new GameGrid with size SCALE_FACTOR * SCALE_FACTOR
 	gameGrid = new GameGrid(SCALE_FACTOR, SCALE_FACTOR);
 	// Initially, the game will not start
 	canStartGame = false;
 	ofSetFrameRate(30);
 
-	gui.setup();
-	gui.add(scale.setup("scale", 10, 10, 100));
+	//gui.setup();
+	//gui.add(scale.setup("scale", 10, 10, 100));
 
 	//gameGrid->getCell(2, 1)->setState(Cell::CellState::ALIVE);
 	//gameGrid->getCell(1, 1)->setState(Cell::CellState::ALIVE);
@@ -37,8 +38,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	// Get the width and height of each Cell for drawing
-	int width = ofGetViewportWidth() / SCALE_FACTOR;
-	int height = ofGetViewportHeight() / SCALE_FACTOR;
+	float width = float(ofGetWidth()) / SCALE_FACTOR;
+	float height = float(ofGetHeight()) / SCALE_FACTOR;
 
 	ofSetColor(255, 255, 255);
 	// Draw grid
@@ -84,7 +85,7 @@ void ofApp::draw(){
 			}
 		}
 	}
-	gui.draw();
+	//gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -115,8 +116,8 @@ void ofApp::mousePressed(int x, int y, int button){
 	// Map the x, y coordinates of the window to a specific cell location
 	// The formula is: cellLocationI = y / (widthOfWindow / scaleFactor)
 	//				   cellLocationJ = x / (heightOfWindow / scaleFactor)
-	int width = ofGetViewportWidth() / SCALE_FACTOR;
-	int height = ofGetViewportHeight() / SCALE_FACTOR;
+	float width = float(ofGetWidth()) / SCALE_FACTOR;
+	float height = float(ofGetHeight()) / SCALE_FACTOR;
 	int j = x / width;
 	int i = y / height;
 
@@ -149,7 +150,14 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
-
+	if (scrollY >= 1) {
+		SCALE_FACTOR = min(100, SCALE_FACTOR + 1);
+	}
+	else if (scrollY <= -1) {
+		SCALE_FACTOR = max(1, SCALE_FACTOR - 1);
+	}
+	delete gameGrid;
+	gameGrid = new GameGrid(SCALE_FACTOR, SCALE_FACTOR);
 }
 
 //--------------------------------------------------------------
