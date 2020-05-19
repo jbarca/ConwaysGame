@@ -3,15 +3,10 @@
 #include <algorithm>
 
 // Setup necessary globals
-//ofxIntSlider scale;
-//ofxPanel gui;
 
 int SCALE_FACTOR = 10;
 GameGrid *gameGrid = NULL;
 bool canStartGame;
-
-// TODO: Fix game drawing with slider value as scale factor. Every time scale factor
-// is changed, update gameGrid to reflect the new scale factor
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -21,13 +16,6 @@ void ofApp::setup(){
 	// Initially, the game will not start
 	canStartGame = false;
 	ofSetFrameRate(30);
-
-	//gui.setup();
-	//gui.add(scale.setup("scale", 10, 10, 100));
-
-	//gameGrid->getCell(2, 1)->setState(Cell::CellState::ALIVE);
-	//gameGrid->getCell(1, 1)->setState(Cell::CellState::ALIVE);
-	//gameGrid->getCell(0, 1)->setState(Cell::CellState::ALIVE);
 }
 
 //--------------------------------------------------------------
@@ -150,12 +138,16 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
+	// If the mouse is scrolled upwards: incrase the scale factor, otherwise,
+	// decrease the scale factor.
 	if (scrollY >= 1) {
 		SCALE_FACTOR = min(100, SCALE_FACTOR + 1);
 	}
 	else if (scrollY <= -1) {
 		SCALE_FACTOR = max(1, SCALE_FACTOR - 1);
 	}
+	// Memory management. Delete the old grid each time, deleting
+	// each cell in the grid too.
 	delete gameGrid;
 	gameGrid = new GameGrid(SCALE_FACTOR, SCALE_FACTOR);
 }
